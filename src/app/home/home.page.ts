@@ -7,6 +7,7 @@ import { DataFrame } from 'danfojs/dist/danfojs-base';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+
   @ViewChild('plot_div') el: ElementRef;
 
 
@@ -23,7 +24,7 @@ export class HomePage {
 
   showPlot: boolean = true;
   excelUploaded: boolean = false;
-  noOfSheets = 3;
+  noOfSheets: number = 0;
   df: dfd.DataFrame;
 
 
@@ -75,17 +76,16 @@ export class HomePage {
   //     // this.el.nativeElement.style.display = 'none'
   //   }
   // }
-
   async onFileChange($event: Event) {
     const excelFile = ($event.target as any).files[0]
     let dfs: dfd.DataFrame[] = []
-    for (let index = 0; index < this.noOfSheets; index++) {
+    for (let index = 0; index < +this.noOfSheets; index++) {
       let tempDf: any = await dfd.readExcel(excelFile, { sheet: index });
       dfs.push(tempDf);
     }
     let mergerdDf = dfs[0];
     for (let j = 1; j < dfs.length; j++) {
-      mergerdDf = dfd.merge({left:mergerdDf,right:dfs[j],on:[dfs[0].columns[0]],how:"inner"})
+      mergerdDf = dfd.merge({ left: mergerdDf, right: dfs[j], on: [dfs[0].columns[0]], how: "inner" })
     }
     this.df = mergerdDf as DataFrame;
     this.excelUploaded = true;
@@ -119,7 +119,7 @@ export class HomePage {
       },
     });
   }
-  handleChange($event: Event) {
+  handleSearch($event: Event) {
     this.searchTerm = ($event as any).detail.value;
     if (this.searchTerm) {
       // this.el.nativeElement.style.display = 'block';
