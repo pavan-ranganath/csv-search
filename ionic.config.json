@@ -1,0 +1,7 @@
+{
+  "name": "csv-search",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
